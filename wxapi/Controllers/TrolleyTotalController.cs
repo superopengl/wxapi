@@ -18,65 +18,71 @@ namespace wxapi.Controllers
 		}
 		public class TrolleyCalculatorSpecial
 		{
-			public List<TrolleyCalculatorQuantity> Quantities { get; set; }
+			public TrolleyCalculatorQuantity[] Quantities { get; set; }
 			public double Total { get; set; }
 		}
 
 		public class TrolleyCalculatorQuantity
 		{
+			public TrolleyCalculatorQuantity() { }
+			public TrolleyCalculatorQuantity(string name, int quantity) {
+				Name = name;
+				Quantity = quantity;
+			}
 			public string Name { get; set; }
 			public int Quantity { get; set; }
 		}
 		public class TrolleyCalculatorRequestBody
 		{
-			public List<TrolleyCalculatorProduct> Products { get; set; }
-			public List<TrolleyCalculatorSpecial> Specials { get; set; }
-			public List<TrolleyCalculatorQuantity> Quantities { get; set; }
+			public TrolleyCalculatorProduct[] Products { get; set; }
+			public TrolleyCalculatorSpecial[] Specials { get; set; }
+			public TrolleyCalculatorQuantity[] Quantities { get; set; }
 		}
 
-		internal bool CanUseSpecial(List<TrolleyCalculatorQuantity> quantities, TrolleyCalculatorSpecial special)
+		internal decimal UseSpecial(IDictionary<string, int> quantities, IDictionary<string, double> regularPriceDic, TrolleyCalculatorSpecial[] specials, int from, decimal totalSoFar)
 		{
-			var specialDic = special.Quantities.ToDictionary(x => x.Name, x => x.Quantity);
-			foreach (var q in quantities)
+			if (from > specials.Length) return totalSoFar;
+
+			var originalQuantities = quantities.ToDictionary(x => x.Key, x => x.Value);
+			if (from == specials.Length)
 			{
-				var name = q.Name;
-				var quantity = q.Quantity;
-				if (!specialDic.ContainsKey(name) || quantity < specialDic[name]) return false;
+				decimal total = 0;
+				// Use retular price
+				foreach (var kvp in quantities)
+				{
+					var name = kvp.Key;
+					var quantity = kvp.Value;
+					if (quantity > 0 && regularPriceDic.ContainsKey(name))
+					{
+						total += (decimal)regularPriceDic[name] * quantity;
+					}
+				}
+				return total;
 			}
-			foreach(var q in quantities)
+
+			var special = specials[from];
+			foreach(var s in special.Quantities)
 			{
-				q.Quantity -= specialDic[q.Name];
+				if(quantities.ContainsKey(s.Name))
+				{
+					quantities[s.Name] -= s.Quantity;
+				}
 			}
-			return true;
+			decimal totalIfUse = totalSoFar + (decimal)special.Total + UseSpecial(quantities, regularPriceDic, specials, from + 1, totalSoFar);
+
+			decimal totalIfNotUse = totalSoFar + UseSpecial(originalQuantities, regularPriceDic, specials, from + 1, totalSoFar);
+
+			return Math.Min(totalIfUse, totalIfNotUse);
 		}
 
 		[HttpPost]
 		public ActionResult<decimal> Post([FromBody] TrolleyCalculatorRequestBody body)
 		{
 			var regularPriceDic = body.Products.ToDictionary(x => x.Name, x => x.Price);
-			var quantities = body.Quantities;
+			var quantities = body.Quantities.ToDictionary(x => x.Name, x => x.Quantity);
+			var specials = body.Specials;
 
-			decimal total = 0;
-			var specialList = body.Specials;
-			for(var i = 0; i< specialList.Count; i++)
-			{
-				var special = specialList[i];
-				if(CanUseSpecial(quantities, special))
-				{
-					total += (decimal)special.Total;
-					i--; // To see if still can use this special.
-				}
-			}
-
-			foreach(var q in quantities.Where(x => x.Quantity > 0))
-			{
-				if (!regularPriceDic.ContainsKey(q.Name))
-				{
-					throw new InvalidOperationException($"Cannot calculate for product '{q.Name}'. Probabaly because the price is't provided.");
-				}
-
-				total += (decimal)regularPriceDic[q.Name] * q.Quantity;
-			}
+			var total = UseSpecial(quantities, regularPriceDic, specials, 0, 0);
 
 			return total;
 		}
