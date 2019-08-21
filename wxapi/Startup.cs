@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using wxapi.Services;
 
 namespace wxapi
 {
@@ -28,6 +29,10 @@ namespace wxapi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 			//services.AddSingleton(typeof(ILogger<T>), typeof(Logger<T>));
+			services.AddSingleton<IConfigService, ConfigService>();
+			services.AddScoped<IProductService, ProductService>();
+			services.AddScoped<IShopperHistoryService, ShopperHistoryService>();
+			services.AddScoped<IRestClient, RestClient>();
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

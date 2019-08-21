@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace wxapi.tests
+namespace wxapi.specs
 {
     public class UnitTest1
     {
