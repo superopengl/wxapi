@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using System.Web;
 
-[assembly: InternalsVisibleTo("wxapi.specs")]
+[assembly: InternalsVisibleTo("wxapi.tests")]
 namespace wxapi.Services
 {
     public class RestClient : IRestClient

@@ -8,7 +8,7 @@ using wxapi.Data;
 using wxapi.Helpers;
 using wxapi.Services;
 
-[assembly: InternalsVisibleTo("wxapi.specs")]
+[assembly: InternalsVisibleTo("wxapi.tests")]
 namespace wxapi.Controllers
 {
 	[Route("api/[controller]")]

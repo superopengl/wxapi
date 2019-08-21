@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wxapi.specs", "wxapi.specs\wxapi.specs.csproj", "{E0AE4405-3DA3-40E7-9FCC-2AD08C4B35C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wxapi.tests", "wxapi.tests\wxapi.tests.csproj", "{E932443A-8CBD-455B-B5AA-FB37C6BC7666}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +20,9 @@ Global
 		{77A644F1-E9E7-40A7-8850-D21D459223AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77A644F1-E9E7-40A7-8850-D21D459223AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77A644F1-E9E7-40A7-8850-D21D459223AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E0AE4405-3DA3-40E7-9FCC-2AD08C4B35C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E0AE4405-3DA3-40E7-9FCC-2AD08C4B35C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E0AE4405-3DA3-40E7-9FCC-2AD08C4B35C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E0AE4405-3DA3-40E7-9FCC-2AD08C4B35C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E932443A-8CBD-455B-B5AA-FB37C6BC7666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E932443A-8CBD-455B-B5AA-FB37C6BC7666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E932443A-8CBD-455B-B5AA-FB37C6BC7666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E932443A-8CBD-455B-B5AA-FB37C6BC7666}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
