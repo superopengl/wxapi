@@ -51,19 +51,19 @@ namespace wxapi.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult<double> Post([FromBody] TrolleyCalculatorRequestBody body)
+		public ActionResult<decimal> Post([FromBody] TrolleyCalculatorRequestBody body)
 		{
 			var regularPriceDic = body.Products.ToDictionary(x => x.Name, x => x.Price);
 			var quantities = body.Quantities;
 
-			double total = 0;
+			decimal total = 0;
 			var specialList = body.Specials;
 			for(var i = 0; i< specialList.Count; i++)
 			{
 				var special = specialList[i];
 				if(CanUseSpecial(quantities, special))
 				{
-					total += special.Total;
+					total += (decimal)special.Total;
 					i--; // To see if still can use this special.
 				}
 			}
@@ -75,7 +75,7 @@ namespace wxapi.Controllers
 					throw new InvalidOperationException($"Cannot calculate for product '{q.Name}'. Probabaly because the price is't provided.");
 				}
 
-				total += regularPriceDic[q.Name] * q.Quantity;
+				total += (decimal)regularPriceDic[q.Name] * q.Quantity;
 			}
 
 			return total;
